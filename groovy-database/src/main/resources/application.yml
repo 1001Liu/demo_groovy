@@ -1,0 +1,39 @@
+#数据源连接信息
+spring:
+  datasource:
+    druid:
+      #Druid连接通用配置，在DruidDataSourceConfig中手动加载
+      use-global-data-source-stat: true
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      # 打开PSCache，并且指定每个连接上PSCache的大小
+      pool-prepared-statements: true
+      max-pool-prepared-statement-per-connection-size: 20
+      time-between-eviction-runs-millis: 60000
+      min-evictable-idle-time-millis: 300000
+      validation-query: SELECT 1 FROM DUAL
+      test-while-idle: true
+      test-on-borrow: false
+      test-on-return: false
+      # 配置监控统计拦截的filter,'wall'用于防火墙,'stat'用于统计,'slf4j'用于日志记录
+      filter:
+        wall:
+          enabled: true
+          config:
+            multi-statement-allow: true
+            none-base-statement-allow: true
+        stat:
+          enabled: true
+          log-slow-sql: true
+          slow-sql-millis: 3000
+          merge-sql: true
+        slf4j:
+          enabled: true
+          statement-log-enabled: true
+          statement-logger-name: BMP
+          statement-sql-pretty-format: true
+      username: root
+      password: 123456
+      url: jdbc:mysql://127.0.0.1:3306/test01?useUnicode=true&characterEncoding=UTF-8&serverTimezone=UTC
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

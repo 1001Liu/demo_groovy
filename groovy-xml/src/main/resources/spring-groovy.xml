@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/lang
+       http://www.springframework.org/schema/lang/spring-lang.xsd">
+
+
+    <lang:groovy id="testGroovyXml" script-source="classpath:groovy/TestGroovyXml.groovy"/>
+
+
+    <lang:groovy id="testGroovyXmlScript">
+
+        <lang:inline-script>
+            import com.liux.groovy.croe.calculate.GroovyCalculate
+            import com.liux.groovy.croe.entity.request.GroovyRequest
+            import com.liux.groovy.croe.entity.response.GroovyResponse
+
+
+            class TestGroovyXmlScript implements GroovyCalculate {
+                @Override
+                GroovyResponse parse(GroovyRequest request) {
+                    request.println()
+                    return GroovyResponse.builder()
+                            .beanName(request.getBeanName())
+                            .groovyName(request.groovyName)
+                            .data("测试xml-script配置bean")
+                            .build()
+                }
+            }
+        </lang:inline-script>
+
+
+    </lang:groovy>
+
+</beans>
