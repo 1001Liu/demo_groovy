@@ -3,6 +3,7 @@ package com.liux.groovy.croe.processor;
 import com.liux.groovy.croe.constant.GroovyConstant;
 import com.liux.groovy.croe.entity.DatabaseScriptSource;
 import org.apache.commons.lang3.StringUtils;
+import org.jetbrains.annotations.NotNull;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.scripting.ScriptSource;
 import org.springframework.scripting.support.ResourceScriptSource;
@@ -19,8 +20,9 @@ import org.springframework.stereotype.Component;
  */
 @Component
 public class CustomerScriptFactoryPostProcessor extends ScriptFactoryPostProcessor {
+    @NotNull
     @Override
-    protected ScriptSource convertToScriptSource(String beanName, String scriptSourceLocator, ResourceLoader resourceLoader) {
+    protected ScriptSource convertToScriptSource(@NotNull String beanName, String scriptSourceLocator, @NotNull ResourceLoader resourceLoader) {
 
         if (scriptSourceLocator.startsWith(INLINE_SCRIPT_PREFIX)) {
             return new StaticScriptSource(scriptSourceLocator.substring(INLINE_SCRIPT_PREFIX.length()), beanName);
