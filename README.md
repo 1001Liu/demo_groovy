@@ -2,7 +2,7 @@
 
 ## groovy简介
 
-[Groovy](http://www.groovy-lang.org/) 是 Apache 旗下的一门基于 JVM 平台的动态/敏捷编程语言，在语言的设计上它吸纳了 Python、Ruby 等语言的优秀特性，语法非常简练和优美，开发效率也非常高。并且，Groovy 可以与 Java 语言无缝对接，在写 Groovy 的时候如果忘记了语法可以直接按Java的语法继续写，也可以在 Java 中调用 Groovy 脚本，这有效的降低了 Java 开发者学习 Groovy 的成本。Groovy 也并不会替代 Java，而是相辅相成、互补的关系，具体使用哪门语言这取决于要解决的问题和使用的场景。
+[Groovy](http://www.groovy-lang.org/)是 Apache 旗下的一门基于 JVM 平台的动态/敏捷编程语言，在语言的设计上它吸纳了 Python、Ruby 等语言的优秀特性，语法非常简练和优美，开发效率也非常高。并且，Groovy 可以与 Java 语言无缝对接，在写 Groovy 的时候如果忘记了语法可以直接按Java的语法继续写，也可以在 Java 中调用 Groovy 脚本，这有效的降低了 Java 开发者学习 Groovy 的成本。
 
 
 
@@ -872,12 +872,91 @@ A
 
 ## groovy应用场景
 
+* 规则引擎
+* 流程引擎
+* 动态脚本环境
+* 动态生成代码
+
 #  groovy与spring整合
 
-## xml配置方式
+**在Java中可以使用GroovyScriptEngine**、**GroovyClassLoader**、**GroovyShell**、**ScriptEngineManager**等方式调用`Groovy`
 
-## 代码配置方式
+引入对应的依赖：
 
-## 注解方式
+```xml
+<!-- https://mvnrepository.com/artifact/org.codehaus.groovy/groovy -->
+        <dependency>
+            <groupId>org.codehaus.groovy</groupId>
+            <artifactId>groovy</artifactId>
+        </dependency>
+```
+
+当然也可以配置为bean的方式，交给spring管理，一般的有以下几种方式：
+
+* xml配置方式
+
+```xml
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:lang="http://www.springframework.org/schema/lang"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd
+       http://www.springframework.org/schema/lang
+       http://www.springframework.org/schema/lang/spring-lang.xsd">
+
+
+    <lang:groovy id="testGroovyXml" script-source="classpath:groovy/TestGroovyXml.groovy"/>
+
+
+    <lang:groovy id="testGroovyXmlScript">
+
+        <lang:inline-script>
+            import com.liux.groovy.croe.calculate.GroovyCalculate
+            import com.liux.groovy.croe.entity.request.GroovyRequest
+            import com.liux.groovy.croe.entity.response.GroovyResponse
+
+
+            class TestGroovyXmlScript implements GroovyCalculate {
+                @Override
+                GroovyResponse parse(GroovyRequest request) {
+                    request.println()
+                    return GroovyResponse.builder()
+                            .beanName(request.getBeanName())
+                            .groovyName(request.groovyName)
+                            .data("测试xml-script配置bean")
+                            .build()
+                }
+            }
+        </lang:inline-script>
+
+
+    </lang:groovy>
+
+</beans>
+```
+
+
+
+* 注解方式
+
+```groovy
+@Component
+class TestGroovyBean implements GroovyCalculate {
+    @Override
+    GroovyResponse parse(GroovyRequest request) {
+        println(request)
+        return GroovyResponse.builder()
+                .beanName(request.getBeanName())
+                .groovyName(request.groovyName)
+                .data(request.param)
+                .build()
+    }
+}
+```
+
+
+
+
 
 # groovy热加载
+
