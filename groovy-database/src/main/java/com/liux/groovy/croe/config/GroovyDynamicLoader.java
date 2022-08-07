@@ -61,6 +61,7 @@ public class GroovyDynamicLoader implements ApplicationContextAware, Initializin
 
     private void init() {
         List<GroovyScript> list = groovyScriptService.list(new LambdaQueryWrapper<GroovyScript>()
+                .eq(GroovyScript::getBeanName, "test01")
                 .eq(GroovyScript::getIsDelete, 0));
         List<GroovyInfo> groovyInfos = convert(list);
         init(groovyInfos);

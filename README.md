@@ -960,3 +960,74 @@ class TestGroovyBean implements GroovyCalculate {
 
 # groovy热加载
 
+## 第一种方案
+
+在spring实现的基础上，进行扩展，新增DatabaseScriptSource，就有以下三种类型的groovyScriptSource
+
+- **ResourceScriptSource**：在 resources 下面写groovy脚本
+- **StaticScriptSource**：把groovy脚本放进XML里
+- **DatabaseScriptSource**：把groovy脚本在数据库或者其它地方
+
+因此，推导出如下的新的groovy脚本加载流程：
+
+![1](image/groovy加载流程.jpg)
+
+
+
+在基于以上流程就提出几个问题：
+
+1.如何加载groovy到spring中的？
+
+2.groovy脚本如何转换为bean？
+
+3.如何获取加载到spring容器中的bean？
+
+4.如何进行移除加载的脚本？
+
+对核心类**ScriptFactoryPostProcessor**进行分析，提取出以下几个关键方法：
+
+- **predictBeanType：**是 Spring 中从 BeanDefinition 中提取 Bean 类型的底层 API
+
+- **prepareScriptBeans：** 准备BeanDefinition
+
+- **getScriptSource：**获取groovy脚本API 
+- **convertToScriptSource：** 转换groovy脚本API 
+- **getScriptedObjectType：** 拿到我们具体实现的groovy脚本
+
+
+
+目前Spring提供ScriptSource接口，支持两种类型，一种是
+
+ResourceScriptSource，另一种是 StaticScriptSource，对应的也就是配置文件里**<lang:inline-script>**这个标签和非这个标签的
+
+如下图所示:
+
+![1659519161386](image/4.png)
+
+
+
+![1659519277076](image/5.png)
+
+```java
+protected ScriptSource convertToScriptSource(String beanName, String scriptSourceLocator,
+			ResourceLoader resourceLoader) {
+
+		if (scriptSourceLocator.startsWith(INLINE_SCRIPT_PREFIX)) {
+			return new StaticScriptSource(scriptSourceLocator.substring(INLINE_SCRIPT_PREFIX.length()), beanName);
+		}
+		else {
+			return new ResourceScriptSource(resourceLoader.getResource(scriptSourceLocator));
+		}
+	}
+```
+
+
+
+* 
+
+
+
+
+
+## 第二种方案
+
