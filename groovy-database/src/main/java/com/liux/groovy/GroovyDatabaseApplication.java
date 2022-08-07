@@ -16,7 +16,7 @@ import java.util.List;
 @SpringBootApplication
 public class GroovyDatabaseApplication {
 
-    public static void main(String[] args) throws InstantiationException, IllegalAccessException {
+    public static void main(String[] args)  {
         SpringApplication.run(GroovyDatabaseApplication.class, args);
         IGroovyScriptService scriptService = SpringContextUtils.getBean(IGroovyScriptService.class);
         List<GroovyScript> list = scriptService.list(new LambdaQueryWrapper<GroovyScript>()
