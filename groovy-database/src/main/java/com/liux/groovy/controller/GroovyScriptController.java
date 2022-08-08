@@ -1,6 +1,7 @@
 package com.liux.groovy.controller;
 
 import com.liux.groovy.common.ReturnResult;
+import com.liux.groovy.config.GroovyClassDynamicLoader;
 import com.liux.groovy.croe.calculate.GroovyParser;
 import com.liux.groovy.croe.config.GroovyDynamicLoader;
 import com.liux.groovy.croe.entity.request.GroovyRequest;
@@ -29,6 +30,9 @@ public class GroovyScriptController {
     private GroovyDynamicLoader dynamicLoader;
 
     @Resource
+    private GroovyClassDynamicLoader groovyClassDynamicLoader;
+
+    @Resource
     private GroovyParser groovyParser;
 
     @ResponseBody
@@ -47,6 +51,14 @@ public class GroovyScriptController {
     @GetMapping("refGroovy")
     public ReturnResult refGroovy() {
         dynamicLoader.refresh();
+        return ReturnResult.success();
+    }
+
+
+    @ResponseBody
+    @GetMapping("refGroovy2")
+    public ReturnResult refGroovy2() {
+        groovyClassDynamicLoader.refresh();
         return ReturnResult.success();
     }
 }

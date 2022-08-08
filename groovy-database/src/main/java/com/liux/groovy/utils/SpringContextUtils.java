@@ -1,5 +1,6 @@
 package com.liux.groovy.utils;
 
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.beans.factory.support.DefaultListableBeanFactory;
@@ -16,7 +17,8 @@ import org.springframework.stereotype.Component;
  * @description :
  */
 @Component
-public class SpringContextUtils  implements ApplicationContextAware {
+@Slf4j
+public class SpringContextUtils implements ApplicationContextAware {
 
     static ApplicationContext context;
 
@@ -25,29 +27,40 @@ public class SpringContextUtils  implements ApplicationContextAware {
         SpringContextUtils.context = applicationContext;
     }
 
-    public static void autowireBean(Class clazz,String beanName) {
-        //将applicationContext转换为ConfigurableApplicationContext
-        ConfigurableApplicationContext configurableApplicationContext = (ConfigurableApplicationContext) context ;
+    public static void setContext(ApplicationContext applicationContext) throws BeansException {
+        if (SpringContextUtils.context == null) {
+            SpringContextUtils.context = applicationContext;
+        }
+    }
 
-        // 获取bean工厂并转换为DefaultListableBeanFactory
-        DefaultListableBeanFactory defaultListableBeanFactory = (DefaultListableBeanFactory) configurableApplicationContext.getBeanFactory();
-
+    public static void autowireBean(Class clazz, String beanName) {
+        DefaultListableBeanFactory defaultListableBeanFactory = getDefaultListableBeanFactory();
         // 通过BeanDefinitionBuilder创建bean定义
         BeanDefinitionBuilder beanDefinitionBuilder = BeanDefinitionBuilder.genericBeanDefinition(clazz);
         defaultListableBeanFactory.registerBeanDefinition(beanName, beanDefinitionBuilder.getRawBeanDefinition());
     }
 
-    public static ApplicationContext getContext() {
-        return context;
+
+    public static boolean isExistBean(String name) {
+        try {
+            context.getBean(name);
+            return true;
+        } catch (Exception e) {
+            log.warn("{}的bean不存在", name);
+            return false;
+        }
     }
 
-    public static <T> T getBean(Class<T> clazz) {
-        return context.getBean(clazz);
-
+    public static void removeBean(String beanName) {
+        DefaultListableBeanFactory defaultListableBeanFactory = getDefaultListableBeanFactory();
+        defaultListableBeanFactory.removeBeanDefinition(beanName);
     }
 
-    public static <T> T getBean(String name) {
-        return (T) context.getBean(name);
+    public static DefaultListableBeanFactory getDefaultListableBeanFactory() {
+        //将applicationContext转换为ConfigurableApplicationContext
+        ConfigurableApplicationContext configurableApplicationContext = (ConfigurableApplicationContext) context;
 
+        // 获取bean工厂并转换为DefaultListableBeanFactory
+        return (DefaultListableBeanFactory) configurableApplicationContext.getBeanFactory();
     }
 }

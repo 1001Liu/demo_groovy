@@ -51,12 +51,12 @@ public class GroovyDynamicLoader implements ApplicationContextAware, Initializin
     public void afterPropertiesSet() throws Exception {
 
         long start = System.currentTimeMillis();
-        System.out.println("开始解析groovy脚本...");
+        System.out.println("GroovyDynamicLoader开始解析groovy脚本...");
 
         init();
 
         long cost = System.currentTimeMillis() - start;
-        System.out.println("结束解析groovy脚本...，耗时：" + cost);
+        System.out.println("GroovyDynamicLoader结束解析groovy脚本...，耗时：" + cost);
     }
 
     private void init() {
@@ -86,6 +86,7 @@ public class GroovyDynamicLoader implements ApplicationContextAware, Initializin
     public void refresh() {
 
         List<GroovyScript> list = groovyScriptService.list(new LambdaQueryWrapper<GroovyScript>()
+                .eq(GroovyScript::getBeanName, "test01")
                 .eq(GroovyScript::getIsDelete, 0));
         List<GroovyInfo> groovyInfos = convert(list);
 
