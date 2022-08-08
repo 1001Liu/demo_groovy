@@ -1413,3 +1413,11 @@ IGroovyScriptService scriptService = SpringContextUtils.getBean(IGroovyScriptSer
     }
 ```
 
+
+
+
+
+# 项目参考地址
+
+[demo-groovy](https://github.com/1001Liu/demo_groovy)
+
