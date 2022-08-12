@@ -7,7 +7,7 @@ package com.liu.groovy
 }*/
 
 //第二种
-for (i in 0..5){
+for (i in 0..5) {
     println("第${i}次循环")
 }
 
@@ -17,7 +17,7 @@ for (i in 0..5){
 
 
 def name = ''
-def result = name?: "abc"
+def result = name ?: "abc"
 
 println(result)
 
@@ -34,3 +34,13 @@ def s2 = s1 as int
 //String 转成 double
 def s3 = s2 as double
 
+Person person
+//Java 写法
+if (person != null) {
+    if (person.data != null) {
+        println person.data.name
+    }
+}
+
+//Groovy
+println person?.data?.name
