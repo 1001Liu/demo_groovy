@@ -220,7 +220,7 @@ for (i in 0..5){
 
 
 
-### 循环 times
+### 循环 time
 
 times表示从0开始循环到4结束
 
@@ -911,7 +911,30 @@ A
     <lang:groovy id="testGroovyXml" script-source="classpath:groovy/TestGroovyXml.groovy"/>
 
 
-   
+    <lang:groovy id="testGroovyXmlScript">
+
+        <lang:inline-script>
+            import com.liux.groovy.croe.calculate.GroovyCalculate
+            import com.liux.groovy.croe.entity.request.GroovyRequest
+            import com.liux.groovy.croe.entity.response.GroovyResponse
+
+
+            class TestGroovyXmlScript implements GroovyCalculate {
+                @Override
+                GroovyResponse parse(GroovyRequest request) {
+                    request.println()
+                    return GroovyResponse.builder()
+                            .beanName(request.getBeanName())
+                            .groovyName(request.groovyName)
+                            .data("测试xml-script配置bean")
+                            .build()
+                }
+            }
+        </lang:inline-script>
+
+
+    </lang:groovy>
+
 </beans>
 ```
 
